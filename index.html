@@ -1,0 +1,73 @@
+<html>
+
+<body>
+    <center>
+        <h1>Have I Been Pwned Password Checker</h1>
+        <input style="width:50%;" type="password" id="password"></input><br>
+        <input type="button" value="Check Password" onclick="checkPw()"></input><br>
+        <h2 id="output"></h2>
+    </center>
+    <script>
+        async function sha1(message) {
+            const msgBuffer = new TextEncoder('utf-8').encode(message)
+            const hashBuffer = await crypto.subtle.digest('SHA-1', msgBuffer)
+            const hashArray = Array.from(new Uint8Array(hashBuffer))
+            const hashHex = hashArray.map(b => ('00' + b.toString(16)).slice(-2)).join('')
+            return hashHex
+        }
+
+        async function getHashes(prefix) {
+            return fetch('https://api.pwnedpasswords.com/range/' + prefix).then((response) => {
+                const reader = response.body.getReader()
+                const stream = new ReadableStream({
+                    start(controller) {
+                        function push() {
+                            reader.read().then(({
+                                done,
+                                value
+                            }) => {
+                                if (done) {
+                                    controller.close()
+                                    return
+                                }
+                                controller.enqueue(value)
+                                push()
+                            })
+                        }
+                        push()
+                    }
+                })
+                return new Response(stream, {
+                    headers: {
+                        'Content-Type': 'text/plain'
+                    }
+                })
+            }).then(data => data.text())
+        }
+
+        async function checkPw() {
+            document.getElementById('output').innerHTML = ''
+            let pw = document.getElementById('password').value
+            if (pw === '') return
+            let hashedPw = await sha1(pw)
+            let prefix = hashedPw.slice(0, 5).toUpperCase()
+            let suffix = hashedPw.slice(5).toUpperCase()
+            let data = await getHashes(prefix)
+            let array = data.trim().split('\n')
+            array = array.map(item => {
+                let parts = item.split(':')
+                return {
+                    suffix: parts[0].toUpperCase(),
+                    count: parseInt(parts[1])
+                }
+            })
+            let matches = array.filter(item => item.suffix === suffix)
+            let count = matches[0] ? matches[0].count : 0
+            console.log('Hashes Length: ' + array.length)
+            console.log('Match Count: ' + count)
+            document.getElementById('output').innerHTML = 'Pwned Count: ' + count
+        }
+    </script>
+</body>
+
+</html>
