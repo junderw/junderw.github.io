@@ -3,8 +3,10 @@
 <body>
     <center>
         <h1>Have I Been Pwned Password Checker</h1>
-        <input style="width:50%;" type="password" id="password"></input><br>
-        <input type="button" value="Check Password" onclick="checkPw()"></input><br>
+        <form onsubmit="checkPw();return false;">
+            <input style="width:50%;" type="password" id="password"></input><br>
+            <input type="button" value="Check Password" onclick="checkPw()"></input><br>
+        </form>
         <h2 id="output"></h2>
     </center>
     <script>
