@@ -52,6 +52,15 @@
             console.log('Match Count: ' + count)
             document.getElementById('output').innerHTML = 'Pwned Count: ' + count
         }
+
+        window.onload = function() {
+          let match = document.location.href.match(/^([^#]+)#(.+)$/)
+          if (match) {
+            window.history.pushState('name', '', match[1])
+            document.getElementById('password').value = match[2]
+            checkPw()
+          }
+        }
     </script>
 </body>
 
