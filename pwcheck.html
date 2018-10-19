@@ -57,8 +57,13 @@
           let match = document.location.href.match(/^([^#]+)#(.+)$/)
           if (match) {
             window.history.pushState('name', '', match[1])
-            document.getElementById('password').value = match[2]
-            checkPw()
+            let pw = document.getElementById('password')
+            pw.value = match[2]
+            checkPw().then(() => {
+              let out = document.getElementById('output')
+              out.innerHTML = 'Password: "' + match[2] + '"<br>' + out.innerHTML
+              pw.value = ''
+            })
           }
         }
     </script>
