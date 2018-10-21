@@ -56,7 +56,7 @@
         window.onload = function() {
           let match = document.location.href.match(/^([^#]+)#(.+)$/)
           if (match) {
-            window.history.pushState('name', '', match[1])
+            window.history.replaceState('name', '', match[1])
             let pw = document.getElementById('password')
             pw.value = match[2]
             checkPw().then(() => {
