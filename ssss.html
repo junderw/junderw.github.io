@@ -1,0 +1,25 @@
+<html>
+<head>
+    <title>BIP39 Phrase Shamir Secret Splitter</title>
+</head>
+<body>
+    <center>
+        <h1>BIP39 Phrase Shamir Secret Splitter</h1>
+        <form onsubmit="checkPw();return false;">
+            <input style="width:50%;" type="password" id="password"></input><br>
+            <input type="button" value="Check Password" onclick="checkPw()"></input><br>
+        </form>
+        <h2 id="output"></h2>
+    </center>
+    <script src="./js/secrets.js" integrity="sha384-NMRMTB636L7nZsM1FMv9Owysnd3rmPzkAQrlhttJzgi9AKrvTGyBAG615sESAOah"></script>
+    <script>
+
+    function splitMnemonic (mnemonic, threshold, shares) {
+      let textHex = secrets.str2hex(mnemonic)
+      return secrets.share(textHex, shares, threshold)
+    }
+
+    </script>
+</body>
+
+</html>
