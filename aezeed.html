@@ -10,9 +10,11 @@
     <center>
         <h1>LND seed (Aezeed) Generator / Decoder</h1>
         <form onsubmit="decode();return false;">
-            Seed <textarea style="width:30%;" id="mnemonic" rows="5" cols="70" oninput="clearOutput()"></textarea><br>
-            Password (optional) <input style="width:30%;" type="password" id="password" oninput="clearOutput()"></input><br>
+            Seed <textarea style="width:30%;" id="mnemonic" rows="5" cols="70" oninput="clearOutput();clearNewPw()"></textarea><br>
+            Password (optional) <input style="width:30%;" type="password" id="password" oninput="clearOutput();clearNewPw()"></input><br>
+            New Password (For change password) <input style="width:30%;" type="password" id="newpassword" oninput="clearOutput()"></input><br>
             <input type="button" value="Decode" onclick="decode()"></input><br>
+            <input type="button" value="Change Password" onclick="changePw()"></input><br>
             <input type="button" value="Generate" onclick="generate()"></input><br>
         </form>
         <h2 id="output"></h2>
@@ -30,8 +32,12 @@
         function clearOutput() {
           document.getElementById('output').innerHTML = ''
         }
+        function clearNewPw() {
+          document.getElementById('newpassword').value = ''
+        }
         function decode() {
           clearOutput()
+          clearNewPw()
           const mnemonic = document.getElementById('mnemonic').value
           if (!mnemonic) {
             const msg = 'Need mnemonic to decode!'
@@ -55,6 +61,7 @@
         }
         function generate() {
           clearOutput()
+          clearNewPw()
           const password = document.getElementById('password').value
           const pw = !password ? 'aezeed' : password;
           const randomSeed = aezeed.CipherSeed.random()
@@ -63,6 +70,30 @@
           document.getElementById('output').innerHTML =
             'Entropy: ' + toHex(randomSeed.entropy) + '<br>' +
             'BirthDate: ' + randomSeed.birthDate.toString()
+        }
+        function changePw() {
+          clearOutput()
+          const mnemonic = document.getElementById('mnemonic').value
+          if (!mnemonic) {
+            const msg = 'Need mnemonic to change password!'
+            alert(msg)
+            throw new Error(msg)
+          }
+          const password = document.getElementById('password').value
+          const pw = !password ? 'aezeed' : password;
+          const newpassword = document.getElementById('newpassword').value
+          const newpw = !newpassword ? 'aezeed' : newpassword;
+          try {
+            const newMnemonic = aezeed.CipherSeed.changePassword(mnemonic, pw, newpw)
+            document.getElementById('output').innerHTML =
+              'New Mnemonic:<br><div style="width:50%;">' + newMnemonic + '</div>'
+          } catch (err) {
+            const msg = 'Invalid Password'
+            if (err.message === msg) {
+              alert(msg)
+              throw err
+            }
+          }
         }
     </script>
 </body>
