@@ -1,0 +1,70 @@
+<html>
+<head>
+    <title>LND seed (Aezeed) Generator / Decoder</title>
+    <meta property="og:title" content="LND seed (Aezeed) Generator / Decoder">
+    <meta property="og:description" content="Simple HTML file for LND seed (Aezeed) Generator / Decoder">
+    <meta property="og:image" content="https://github.com/lightningnetwork/lnd/blob/fac3c84806c5629c8438e29198de90ea40bf7f26/logo.png?raw=true">
+    <meta name="twitter:card" content="summary_large_image">    
+</head>
+<body>
+    <center>
+        <h1>LND seed (Aezeed) Generator / Decoder</h1>
+        <form onsubmit="decode();return false;">
+            Seed <textarea style="width:30%;" id="mnemonic" rows="5" cols="70" oninput="clearOutput()"></textarea><br>
+            Password (optional) <input style="width:30%;" type="password" id="password" oninput="clearOutput()"></input><br>
+            <input type="button" value="Decode" onclick="decode()"></input><br>
+            <input type="button" value="Generate" onclick="generate()"></input><br>
+        </form>
+        <h2 id="output"></h2>
+    </center>
+    <script src="./js/aezeed.js"></script>
+    <script>
+        function toHex(uint8array) {
+          return Array.from(uint8array).reduce(
+            (final, byte) => {
+              return final + ('0' + byte.toString(16)).slice(-2)
+            },
+            '',
+          )
+        }
+        function clearOutput() {
+          document.getElementById('output').innerHTML = ''
+        }
+        function decode() {
+          clearOutput()
+          const mnemonic = document.getElementById('mnemonic').value
+          if (!mnemonic) {
+            const msg = 'Need mnemonic to decode!'
+            alert(msg)
+            throw new Error(msg)
+          }
+          const password = document.getElementById('password').value
+          const pw = !password ? 'aezeed' : password;
+          try {
+            const decoded = aezeed.CipherSeed.fromMnemonic(mnemonic, pw)
+            document.getElementById('output').innerHTML =
+              'Entropy: ' + toHex(decoded.entropy) + '<br>' +
+              'BirthDate: ' + decoded.birthDate.toString()
+          } catch (err) {
+            const msg = 'Invalid Password'
+            if (err.message === msg) {
+              alert(msg)
+              throw err
+            }
+          }
+        }
+        function generate() {
+          clearOutput()
+          const password = document.getElementById('password').value
+          const pw = !password ? 'aezeed' : password;
+          const randomSeed = aezeed.CipherSeed.random()
+          const mnemonic = randomSeed.toMnemonic(pw)
+          document.getElementById('mnemonic').value = mnemonic
+          document.getElementById('output').innerHTML =
+            'Entropy: ' + toHex(randomSeed.entropy) + '<br>' +
+            'BirthDate: ' + randomSeed.birthDate.toString()
+        }
+    </script>
+</body>
+
+</html>
