@@ -83,6 +83,27 @@
         console.error(err);
       });
 
+    function getSecureRandomInt(max) {
+      const range = 2 ** 32;
+      const maxMultiple = Math.floor(range / max) * max;
+
+      let rand;
+      do {
+        rand = crypto.getRandomValues(new Uint32Array(1))[0];
+      } while (rand >= maxMultiple); // reject biased tail
+
+      return rand % max;
+    }
+
+    function secureShuffle(array) {
+      const shuffled = array.slice();
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = getSecureRandomInt(i + 1); // unbiased
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+      return shuffled;
+    }
+
     function rollWords() {
       const resultEl = document.getElementById('result');
       const num = parseInt(document.getElementById('numWords').value);
@@ -98,11 +119,7 @@
       }
 
       // Shuffle and select random entries
-      const shuffled = csvData
-        .map(line => ({ line, sort: Math.random() }))
-        .sort((a, b) => a.sort - b.sort)
-        .map(obj => obj.line)
-        .slice(0, num);
+      const shuffled = secureShuffle(csvData).slice(0, num);
 
       // Extract columns 2 and 4
       const output = shuffled.map(row => {
