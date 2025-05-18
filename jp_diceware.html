@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>Word Roller</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 2em;
+    }
+    input[type="number"] {
+      width: 60px;
+    }
+    .word-list {
+      margin-top: 1em;
+      white-space: pre;
+      font-family: monospace;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎲 Word Roller</h1>
+  <label for="numWords">Number of words (1–10):</label>
+  <input type="number" id="numWords" min="1" max="10" value="3">
+  <button onclick="rollWords()">Roll!</button>
+
+  <div class="word-list" id="result">Loading wordlist...</div>
+
+  <script>
+    let csvData = [];
+
+    // Load the CSV when the page loads
+    fetch('./wordlist.csv')
+      .then(response => {
+        if (!response.ok) throw new Error('Failed to load CSV');
+        return response.text();
+      })
+      .then(text => {
+        csvData = text.trim().split('\n').filter(line => line.includes(','));
+        document.getElementById('result').textContent = 'Ready!';
+      })
+      .catch(err => {
+        document.getElementById('result').textContent = 'Error loading wordlist.csv';
+        console.error(err);
+      });
+
+    function rollWords() {
+      const resultEl = document.getElementById('result');
+      const num = parseInt(document.getElementById('numWords').value);
+
+      if (isNaN(num) || num < 1 || num > 10) {
+        resultEl.textContent = 'Please enter a number between 1 and 10.';
+        return;
+      }
+
+      if (csvData.length === 0) {
+        resultEl.textContent = 'Wordlist not loaded.';
+        return;
+      }
+
+      // Shuffle and select random entries
+      const shuffled = csvData
+        .map(line => ({ line, sort: Math.random() }))
+        .sort((a, b) => a.sort - b.sort)
+        .map(obj => obj.line)
+        .slice(0, num);
+
+      // Extract columns 2 and 4
+      const output = shuffled.map(row => {
+        const cols = row.split(',');
+        return `${cols[1]}, ${cols[3]}`;
+      }).join('\n');
+
+      resultEl.textContent = output;
+    }
+  </script>
+</body>
+</html>
