@@ -70,6 +70,10 @@
       margin-top: 1rem;
       word-wrap: break-word;
     }
+
+    #passphrase span {
+      margin-right: 0.05em;
+    }
   </style>
 </head>
 <body>
@@ -85,12 +89,16 @@
   <div class="passphrase-section">
     <h2>Passphrase</h2>
     <div class="passphrase-options">
-      <label><input type="radio" name="delimiter" value=" " checked> space</label>
-      <label><input type="radio" name="delimiter" value="."> period</label>
+      <label><input type="radio" name="delimiter" value="." checked> period</label>
+      <label><input type="radio" name="delimiter" value=" "> space</label>
       <label><input type="radio" name="delimiter" value="-"> hyphen</label>
       <label><input type="radio" name="delimiter" value=","> comma</label>
+      <br><br>
+      <label><input type="checkbox" id="capitalize"> Capitalize one word</label>
+      <label><input type="checkbox" id="addNumber"> Add a number to one word</label>
     </div>
     <div id="passphrase"></div>
+    <button onclick="copyPassphrase()">Copy to Clipboard</button>
   </div>
 </main>
 
@@ -125,19 +133,51 @@
       return rand % max;
     }
 
-    function secureShuffle(array) {
-      const shuffled = array.slice();
-      for (let i = shuffled.length - 1; i > 0; i--) {
-        const j = getSecureRandomInt(i + 1); // unbiased
-        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-      }
-      return shuffled;
-    }
-
     function updatePassphrase() {
       const delimiter = document.querySelector('input[name="delimiter"]:checked').value;
-      const romajiWords = lastWords.map(row => row.split(',')[3]);
-      document.getElementById('passphrase').textContent = romajiWords.join(delimiter);
+      const capitalize = document.getElementById('capitalize').checked;
+      const addNumber = document.getElementById('addNumber').checked;
+
+      let romajiWords = lastWords.map(row => row.split(',')[3]);
+
+      if (romajiWords.length === 0) {
+        document.getElementById('passphrase').textContent = '';
+        return;
+      }
+
+      // Capitalize one random word
+      if (capitalize) {
+        const index = getSecureRandomInt(romajiWords.length);
+        romajiWords[index] = romajiWords[index][0].toUpperCase() + romajiWords[index].slice(1);
+      }
+
+      // Add a number before or after one random word
+      if (addNumber) {
+        const index = getSecureRandomInt(romajiWords.length);
+        const num = getSecureRandomInt(10).toString();
+        const before = getSecureRandomInt(2) === 0;
+        romajiWords[index] = before ? num + romajiWords[index] : romajiWords[index] + num;
+      }
+
+      const passEl = document.getElementById('passphrase');
+      passEl.innerHTML = ''; // Clear
+
+      romajiWords.join(delimiter).split('').forEach(char => {
+        const span = document.createElement('span');
+
+        if (/\d/.test(char)) {
+          span.style.color = 'blue';
+        } else if (/[\.\,\-\s]/.test(char)) {
+          span.style.color = 'red';
+        } else if (/[A-Z]/.test(char)) {
+          span.style.color = 'green';
+        } else {
+          span.style.color = 'black';
+        }
+
+        span.textContent = char;
+        passEl.appendChild(span);
+      });
     }
 
     function rollWords() {
@@ -154,22 +194,45 @@
         return;
       }
 
-      // Shuffle and select random entries
-      lastWords = secureShuffle(csvData).slice(0, num);
+      lastWords = [];
+      for (let i = 0; i < num; i++) {
+        lastWords.push(csvData[getSecureRandomInt(csvData.length)]);
+      }
 
       // Extract columns 2, 3, and 4 for display
-      const output = lastWords.map(row => {
+      const table = document.createElement('table');
+      table.style.width = '100%';
+      table.style.borderCollapse = 'collapse';
+      lastWords.forEach(row => {
         const cols = row.split(',');
-        return `${cols[1]}  -  ${cols[2]}  -  ${cols[3]}`;
-      }).join('\n');
+        const tr = document.createElement('tr');
+        for (let i = 1; i < 4; i++) {
+          const td = document.createElement('td');
+          td.textContent = cols[i];
+          tr.appendChild(td);
+        }
+        table.appendChild(tr);
+      });
 
-      resultEl.textContent = output;
+      resultEl.innerHTML = '';
+      resultEl.appendChild(table);
 
       updatePassphrase();
     }
 
+    function copyPassphrase() {
+      const spanElements = document.querySelectorAll('#passphrase span');
+      const text = Array.from(spanElements).map(span => span.textContent).join('');
+      
+      navigator.clipboard.writeText(text).then(() => {
+        console.log('Copy success!');
+      }).catch(err => {
+        console.error('Copy failed:', err);
+      });
+    }
+
     // Update passphrase when delimiter changes
-    document.querySelectorAll('input[name="delimiter"]').forEach(radio => {
+    document.querySelectorAll('input[name="delimiter"], #capitalize, #addNumber').forEach(radio => {
       radio.addEventListener('change', updatePassphrase);
     });
   </script>
