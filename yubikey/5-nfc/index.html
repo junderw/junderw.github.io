@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yubikey 5 NFC (Type-C) 設定ガイド</title>
+    <style>
+        body {
+            font-family: 'Hiragino Sans', 'Yu Gothic', 'Meiryo', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            background-color: #2c5aa0;
+            color: white;
+            padding: 30px 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            margin: 0;
+            font-size: 2.2em;
+        }
+        
+        .nav-link {
+            display: inline-block;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: rgb(0, 0, 0);
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            margin-top: 15px;
+            transition: background-color 0.3s ease;
+        }
+        
+        .nav-link:hover {
+            background-color: rgb(165, 184, 206);
+        }
+        
+        .content-section {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        h2 {
+            color: #2c5aa0;
+            border-bottom: 2px solid #2c5aa0;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .step {
+            background-color: #f8f9fa;
+            border-left: 4px solid #2c5aa0;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 5px 5px 0;
+        }
+        
+        .step-number {
+            background-color: #2c5aa0;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 15px;
+        }
+        
+        .warning {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .warning-icon {
+            color: #856404;
+            font-weight: bold;
+        }
+        
+        .highlight {
+            background-color: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #2196f3;
+        }
+        
+        code {
+            background-color: #f1f1f1;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .feature-list {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        
+        .feature-list ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+        
+        .feature-list li {
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header section -->
+        <header>
+            <h1>Yubikey 5 NFC (Type-C) 設定ガイド</h1>
+            <a href="../" class="nav-link">← メインページに戻る</a>
+        </header>
+        
+        <!-- Introduction -->
+        <div class="content-section">
+            <h2>Yubikey 5 NFC について</h2>
+            <p>Yubikey 5 NFC (Type-C) は、Yubikeyシリーズの最上位モデルで、幅広い認証プロトコルに対応しています。USB-C接続とNFC（近距離無線通信）の両方をサポートし、パソコンやスマートフォンで使用できます。</p>
+            
+            <div class="feature-list">
+                <h3>主な機能</h3>
+                <ul>
+                    <li><strong>FIDO2/WebAuthn</strong> - パスワードレス認証</li>
+                    <li><strong>FIDO U2F</strong> - 二要素認証</li>
+                    <li><strong>Yubico OTP</strong> - ワンタイムパスワード</li>
+                    <li><strong>OATH-TOTP/HOTP</strong> - 時間/カウンターベースOTP</li>
+                    <li><strong>PIV (スマートカード)</strong> - 証明書ベース認証</li>
+                    <li><strong>OpenPGP</strong> - 暗号化・署名</li>
+                    <li><strong>静的パスワード</strong> - 固定パスワード入力</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Step 1: NFC Activation -->
+        <div class="content-section">
+            <h2>手順1: NFCチップの有効化</h2>
+            <div class="step">
+                <span class="step-number">1</span>
+                <div style="display: inline-block; width: calc(100% - 50px);">
+                    <h3>USB電源への接続</h3>
+                    <p>Yubikey 5 NFCのNFCチップを有効化するには、<strong>必ず5秒間USB電源に接続</strong>する必要があります。</p>
+                    <p>この手順は以下の場合に必要です：</p>
+                    <ul>
+                        <li>初回セットアップ時</li>
+                        <li>長期間使用していない場合</li>
+                        <li>NFCが反応しない場合</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="warning">
+                <span class="warning-icon">⚠️ 重要：</span>
+                NFCを使用する前に、必ずUSB-C端子をパソコンやUSB充電器に5秒間接続してください。この手順を忘れると、スマートフォンでNFCが認識されません。
+            </div>
+        </div>
+        
+        <!-- Step 2: FIDO PIN Setup -->
+        <div class="content-section">
+            <h2>手順2: FIDO PINの設定</h2>
+            <div class="step">
+                <span class="step-number">2</span>
+                <div style="display: inline-block; width: calc(100% - 50px);">
+                    <h3>PINの事前設定が推奨される理由</h3>
+                    <p>一部のウェブサイトではFIDO2 PINの作成ができない場合があります。そのため、以下のいずれかの方法で事前にPINを設定することを強く推奨します。</p>
+                </div>
+            </div>
+            
+            <div class="highlight">
+                <h3>PIN設定方法</h3>
+                <p><strong>方法1: Yubico Authenticatorアプリを使用</strong></p>
+                <ul>
+                    <li>スマートフォンまたはパソコンにYubico Authenticatorアプリをインストール</li>
+                    <li>アプリでYubikeyを認識させる</li>
+                    <li>FIDO2設定からPINを設定</li>
+                </ul>
+                
+                <p><strong>方法2: Chromeブラウザの設定を使用</strong></p>
+                <ul>
+                    <li>Chromeブラウザを開く</li>
+                    <li>設定 → プライバシーとセキュリティ → セキュリティ</li>
+                    <li>「セキュリティキーの管理」を選択</li>
+                    <li>PINを設定</li>
+                </ul>
+            </div>
+            
+            <div class="warning">
+                <span class="warning-icon">💡 ヒント：</span>
+                PINは最低4桁の数字で設定できます。忘れやすいPINは避け、安全で覚えやすいものを選択してください。
+            </div>
+        </div>
+        
+        <!-- Step 3: Advanced Features -->
+        <div class="content-section">
+            <h2>手順3: 高度な機能の管理</h2>
+            <div class="step">
+                <span class="step-number">3</span>
+                <div style="display: inline-block; width: calc(100% - 50px);">
+                    <h3>Yubico Authenticator（デスクトップ版）の活用</h3>
+                    <p>Yubikey 5シリーズの全機能を活用するには、デスクトップ版のYubico Authenticatorアプリケーションを使用します。このアプリケーションでは以下の管理が可能です：</p>
+                </div>
+            </div>
+            
+            <div class="feature-list">
+                <h3>管理可能な機能</h3>
+                <ul>
+                    <li><strong>機能トグル</strong> - 各種認証プロトコルの有効/無効切り替え</li>
+                    <li><strong>静的パスワード（HID経由）</strong> - 固定パスワードの設定と管理</li>
+                    <li><strong>OATH認証情報</strong> - TOTPトークンの追加と管理</li>
+                    <li><strong>PIV証明書</strong> - スマートカード証明書の管理</li>
+                    <li><strong>OpenPGPキー</strong> - 暗号化・署名キーの管理</li>
+                </ul>
+            </div>
+            
+            <div class="warning">
+                <span class="warning-icon">🔐 macOSでの注意事項：</span>
+                Yubico OTPと静的パスワード機能は、YubikeyをHIDデバイス（キーボード）として認識させます。最近のMacBookでは、初回接続時にキーボードアクセス許可を求められる場合があります。これは正常な動作です。
+            </div>
+            
+            <div class="highlight">
+                <h3>HIDデバイスとしての動作について</h3>
+                <p>以下の機能を使用する際、YubikeyはHIDデバイス（キーボード）として動作します：</p>
+                <ul>
+                    <li>Yubico OTP（ワンタイムパスワード）</li>
+                    <li>静的パスワード</li>
+                    <li>OATH-HOTP（一部の設定）</li>
+                </ul>
+                <p>このため、macOSでは「入力監視」や「アクセシビリティ」の許可を求められる場合があります。</p>
+            </div>
+        </div>
+        
+        <!-- Footer navigation -->
+        <div style="text-align: center; margin-top: 40px;">
+            <a href="../" class="nav-link">メインページに戻る</a>
+            <a href="../security-key-series/" class="nav-link">Security Key Seriesのガイド</a>
+        </div>
+    </div>
+</body>
+</html>

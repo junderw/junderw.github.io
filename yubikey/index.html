@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yubikey 教育サイト</title>
+    <style>
+        body {
+            font-family: 'Hiragino Sans', 'Yu Gothic', 'Meiryo', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            background-color: #2c5aa0;
+            color: white;
+            padding: 40px 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            margin: 0;
+            font-size: 2.5em;
+        }
+        
+        .subtitle {
+            margin-top: 10px;
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .yubikey-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .yubikey-card {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .yubikey-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .yubikey-card h2 {
+            color: #2c5aa0;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+        
+        .yubikey-card p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .yubikey-link {
+            display: inline-block;
+            background-color: #2c5aa0;
+            color: white;
+            text-decoration: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+        
+        .yubikey-link:hover {
+            background-color: #1a3f73;
+        }
+        
+        .intro {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            color: #666;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header section -->
+        <header>
+            <h1>Yubikey 教育サイト</h1>
+            <p class="subtitle">セキュリティキーの設定と使用方法を学ぼう</p>
+        </header>
+        
+        <!-- Introduction section -->
+        <div class="intro">
+            <h2>Yubikeyについて</h2>
+            <p>Yubikeyは、オンラインアカウントのセキュリティを強化するハードウェア認証デバイスです。二要素認証（2FA）やパスワードレス認証に対応し、フィッシング攻撃からあなたを守ります。</p>
+            <p>このサイトでは、Yubikeyの主要なモデルの設定方法と使用方法を詳しく説明します。</p>
+        </div>
+        
+        <!-- Yubikey models grid -->
+        <div class="yubikey-grid">
+            <!-- Yubikey 5 NFC Card -->
+            <div class="yubikey-card">
+                <h2>Yubikey 5 NFC (Type-C)</h2>
+                <p>フル機能を搭載したYubikeyの最上位モデル。NFC、USB-C接続に対応し、多様な認証プロトコルをサポートします。</p>
+                <p><strong>主な機能：</strong></p>
+                <p>• FIDO2/WebAuthn<br>
+                • FIDO U2F<br>
+                • Yubico OTP<br>
+                • OATH-TOTP/HOTP<br>
+                • PIV (スマートカード)<br>
+                • OpenPGP<br>
+                • 静的パスワード</p>
+                <a href="5-nfc/" class="yubikey-link">設定ガイドを見る</a>
+            </div>
+            
+            <!-- Security Key Series Card -->
+            <div class="yubikey-card">
+                <h2>Security Key Series (Type-C)</h2>
+                <p>FIDO認証に特化したエントリーモデル。シンプルで使いやすく、基本的なセキュリティニーズに最適です。</p>
+                <p><strong>主な機能：</strong></p>
+                <p>• FIDO2/WebAuthn<br>
+                • FIDO U2F<br>
+                • 基本的な二要素認証</p>
+                <br>
+                <a href="security-key-series/" class="yubikey-link">設定ガイドを見る</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

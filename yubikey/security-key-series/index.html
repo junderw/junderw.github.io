@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security Key Series (Type-C) 設定ガイド</title>
+    <style>
+        body {
+            font-family: 'Hiragino Sans', 'Yu Gothic', 'Meiryo', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            background-color: #2c5aa0;
+            color: white;
+            padding: 30px 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            margin: 0;
+            font-size: 2.2em;
+        }
+        
+        .nav-link {
+            display: inline-block;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: rgb(0, 0, 0);
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            margin-top: 15px;
+            transition: background-color 0.3s ease;
+        }
+        
+        .nav-link:hover {
+            background-color: rgb(165, 184, 206);
+        }
+        
+        .content-section {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        h2 {
+            color: #2c5aa0;
+            border-bottom: 2px solid #2c5aa0;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .step {
+            background-color: #f8f9fa;
+            border-left: 4px solid #2c5aa0;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 5px 5px 0;
+        }
+        
+        .step-number {
+            background-color: #2c5aa0;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 15px;
+        }
+        
+        .warning {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .warning-icon {
+            color: #856404;
+            font-weight: bold;
+        }
+        
+        .highlight {
+            background-color: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #2196f3;
+        }
+        
+        .info-box {
+            background-color: #e8f5e8;
+            border: 1px solid #4caf50;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .feature-list {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        
+        .feature-list ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+        
+        .feature-list li {
+            margin-bottom: 8px;
+        }
+        
+        .comparison-table {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        
+        .comparison-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .comparison-table th,
+        .comparison-table td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .comparison-table th {
+            background-color: #2c5aa0;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header section -->
+        <header>
+            <h1>Security Key Series (Type-C) 設定ガイド</h1>
+            <a href="../" class="nav-link">← メインページに戻る</a>
+        </header>
+        
+        <!-- Introduction -->
+        <div class="content-section">
+            <h2>Security Key Series について</h2>
+            <p>Security Key Series (Type-C) は、FIDO認証に特化したYubikeyのエントリーモデルです。シンプルで使いやすく、基本的なセキュリティニーズに最適な選択肢です。上位モデルのYubikey 5シリーズと比較して機能は限定されますが、二要素認証の基本機能を手頃な価格で提供します。</p>
+            
+            <div class="feature-list">
+                <h3>主な機能</h3>
+                <ul>
+                    <li><strong>FIDO2/WebAuthn</strong> - パスワードレス認証</li>
+                    <li><strong>FIDO U2F</strong> - 二要素認証</li>
+                    <li><strong>基本的なセキュリティキー機能</strong></li>
+                </ul>
+            </div>
+            
+            <div class="info-box">
+                <strong>🎯 こんな方におすすめ：</strong>
+                <ul>
+                    <li>初めてセキュリティキーを使用する方</li>
+                    <li>基本的な二要素認証のみ必要な方</li>
+                    <li>コストパフォーマンスを重視する方</li>
+                    <li>シンプルな操作を好む方</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Model Comparison -->
+        <div class="content-section">
+            <h2>Yubikey 5 NFC との違い</h2>
+            <div class="comparison-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>機能</th>
+                            <th>Security Key Series</th>
+                            <th>Yubikey 5 NFC</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>FIDO2/WebAuthn</td>
+                            <td>✅ 対応</td>
+                            <td>✅ 対応</td>
+                        </tr>
+                        <tr>
+                            <td>FIDO U2F</td>
+                            <td>✅ 対応</td>
+                            <td>✅ 対応</td>
+                        </tr>
+                        <tr>
+                            <td>NFC</td>
+                            <td>✅ 対応</td>
+                            <td>✅ 対応</td>
+                        </tr>
+                        <tr>
+                            <td>Yubico OTP</td>
+                            <td>❌ 非対応</td>
+                            <td>✅ 対応</td>
+                        </tr>
+                        <tr>
+                            <td>OATH認証</td>
+                            <td>❌ 非対応</td>
+                            <td>✅ 対応</td>
+                        </tr>
+                        <tr>
+                            <td>PIV/Smart Card</td>
+                            <td>❌ 非対応</td>
+                            <td>✅ 対応</td>
+                        </tr>
+                        <tr>
+                            <td>OpenPGP</td>
+                            <td>❌ 非対応</td>
+                            <td>✅ 対応</td>
+                        </tr>
+                        <tr>
+                            <td>静的パスワード</td>
+                            <td>❌ 非対応</td>
+                            <td>✅ 対応</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- Step 1: NFC Activation -->
+        <div class="content-section">
+            <h2>手順1: NFCチップの有効化</h2>
+            <div class="step">
+                <span class="step-number">2</span>
+                <div style="display: inline-block; width: calc(100% - 50px);">
+                    <h3>USB電源への接続</h3>
+                    <p>Security Key SeriesのNFCチップを有効化するには、<strong>必ず5秒間USB電源に接続</strong>する必要があります。</p>
+                    <p>この手順は以下の場合に必要です：</p>
+                    <ul>
+                        <li>初回セットアップ時</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="warning">
+                <span class="warning-icon">⚠️ 重要：</span>
+                NFCを使用する前に、必ずUSB-C端子をパソコンやUSB充電器に5秒間接続してください。この手順を忘れると、スマートフォンでNFCが認識されません。
+            </div>
+            
+            <div class="info-box">
+                <strong>📱 スマートフォンでの使用について：</strong>
+                <p>Security Key SeriesはNFC対応のため、電源接続後はスマートフォンでの無線使用が可能です。Android・iOSの両方でNFC認証をご利用いただけます。</p>
+            </div>
+        </div>
+        
+        <!-- Step 2: FIDO PIN Setup -->
+        <div class="content-section">
+            <h2>手順2: FIDO PINの設定</h2>
+            <div class="step">
+                <span class="step-number">1</span>
+                <div style="display: inline-block; width: calc(100% - 50px);">
+                    <h3>PINの事前設定が推奨される理由</h3>
+                    <p>一部のウェブサイトではFIDO2 PINの作成ができない場合があります。そのため、以下のいずれかの方法で事前にPINを設定することを強く推奨します。</p>
+                </div>
+            </div>
+            
+            <div class="highlight">
+                <h3>PIN設定方法</h3>
+                <p><strong>方法1: Yubico Authenticatorアプリを使用</strong></p>
+                <ul>
+                    <li>パソコンにYubico Authenticatorアプリをインストール</li>
+                    <li>Security KeyをUSB-C端子に接続</li>
+                    <li>アプリでSecurity Keyを認識させる</li>
+                    <li>FIDO2設定からPINを設定</li>
+                </ul>
+                
+                <p><strong>方法2: Chromeブラウザの設定を使用</strong></p>
+                <ul>
+                    <li>Security KeyをパソコンのUSB-C端子に接続</li>
+                    <li>Chromeブラウザを開く</li>
+                    <li>設定 → プライバシーとセキュリティ → セキュリティ</li>
+                    <li>「セキュリティキーの管理」を選択</li>
+                    <li>PINを設定</li>
+                </ul>
+            </div>
+            
+            <div class="warning">
+                <span class="warning-icon">💡 ヒント：</span>
+                PINは最低4桁の数字で設定できます。忘れやすいPINは避け、安全で覚えやすいものを選択してください。Security Key SeriesではPINの変更や リセットオプションが限定的なため、慎重に設定してください。
+            </div>
+        </div>
+        
+        <!-- Step 3: Basic Usage -->
+        <div class="content-section">
+            <h2>手順3: 基本的な使用方法</h2>
+            <div class="step">
+                <span class="step-number">3</span>
+                <div style="display: inline-block; width: calc(100% - 50px);">
+                    <h3>ウェブサイトでの認証</h3>
+                    <p>Security Key Seriesの使用は非常にシンプルです：</p>
+                </div>
+            </div>
+            
+            <div class="feature-list">
+                <h3>基本的な使用手順</h3>
+                <ul>
+                    <li><strong>ステップ1</strong> - ウェブサイトのセキュリティ設定でFIDO2/U2F認証を有効化</li>
+                    <li><strong>ステップ2</strong> - Security KeyをパソコンのUSB-C端子に接続</li>
+                    <li><strong>ステップ3</strong> - ウェブサイトの指示に従ってSecurity Keyのボタンを押す</li>
+                    <li><strong>ステップ4</strong> - 必要に応じてPINを入力</li>
+                </ul>
+            </div>
+            
+            <div class="highlight">
+                <h3>対応サービス例</h3>
+                <p>Security Key Seriesは以下のような主要サービスで使用できます：</p>
+                <ul>
+                    <li>Google アカウント</li>
+                    <li>Microsoft アカウント</li>
+                    <li>Facebook / Meta</li>
+                    <li>Twitter / X</li>
+                    <li>GitHub</li>
+                    <li>Dropbox</li>
+                    <li>その他FIDO2/U2F対応サービス</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Management and Limitations -->
+        <div class="content-section">
+            <h2>管理機能と制限事項</h2>
+            
+            <div class="info-box">
+                <h3>✅ 利用可能な管理機能</h3>
+                <ul>
+                    <li>FIDO2 PINの設定と変更</li>
+                    <li>基本的なセキュリティキー登録と削除</li>
+                    <li>デバイス情報の確認</li>
+                </ul>
+            </div>
+            
+            <div class="warning">
+                <h3>❌ 利用できない機能（Yubikey 5との比較）</h3>
+                <ul>
+                    <li><strong>Yubico OTP</strong> - ワンタイムパスワード生成機能</li>
+                    <li><strong>静的パスワード</strong> - 固定パスワード入力機能</li>
+                    <li><strong>OATH認証</strong> - TOTPトークン管理</li>
+                    <li><strong>PIV/スマートカード</strong> - 証明書ベース認証</li>
+                    <li><strong>OpenPGP</strong> - 暗号化・署名機能</li>
+                    <li><strong>高度な設定管理</strong> - 機能トグルなど</li>
+                </ul>
+            </div>
+            
+            <div class="highlight">
+                <h3>HIDデバイスとしての動作について</h3>
+                <p>Security Key SeriesはFIDO認証のみに対応しているため、<strong>HIDデバイス（キーボード）としては動作しません</strong>。そのため、以下の点にご注意ください：</p>
+                <ul>
+                    <li>macOSでキーボードアクセス許可を求められることはありません</li>
+                    <li>Yubico OTPや静的パスワード機能は使用できません</li>
+                    <li>より単純で安全な動作モードとなります</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Upgrade Path -->
+        <div class="content-section">
+            <h2>アップグレードを検討するタイミング</h2>
+            <p>以下のような場合は、Yubikey 5シリーズへのアップグレードを検討することをお勧めします：</p>
+            
+            <div class="feature-list">
+                <h3>アップグレードを検討すべき状況</h3>
+                <ul>
+                    <li><strong>TOTP認証アプリの統合</strong> - Google AuthenticatorやAuthyの代替が必要</li>
+                    <li><strong>静的パスワード機能</strong> - 固定パスワードの自動入力が必要</li>
+                    <li><strong>企業環境での証明書認証</strong> - PIV/スマートカード機能が必要</li>
+                    <li><strong>暗号化・署名</strong> - OpenPGP機能が必要</li>
+                    <li><strong>より高度なセキュリティ管理</strong> - 詳細な設定制御が必要</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Footer navigation -->
+        <div style="text-align: center; margin-top: 40px;">
+            <a href="../" class="nav-link">メインページに戻る</a>
+            <a href="../5-nfc/" class="nav-link">Yubikey 5 NFCのガイド</a>
+        </div>
+    </div>
+</body>
+</html>
